@@ -5,6 +5,9 @@
   home.homeDirectory = "/home/elise";
 
   imports = [
+    # Home folder configs
+    ../../home/tuir
+
     # Extra modules to import
     ../../modules/bash.nix
     ../../modules/git.nix
