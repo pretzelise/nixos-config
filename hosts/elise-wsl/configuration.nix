@@ -1,7 +1,12 @@
 # NixOS-WSL specific options are documented on the NixOS-WSL repository:
 # https://github.com/nix-community/NixOS-WSL
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   networking.hostName = "elise-wsl";
@@ -11,7 +16,10 @@
   wsl.defaultUser = "elise";
 
   # Enable flakes
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   # Garbage collection
   nix.gc = {
@@ -24,10 +32,13 @@
   nix.settings.auto-optimise-store = true;
 
   # Add user 'elise'
-    users.users.elise = {
+  users.users.elise = {
     isNormalUser = true;
     description = "Elise";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+    ];
     packages = with pkgs; [
     ];
   };
@@ -40,7 +51,7 @@
 
   environment.systemPackages = with pkgs; [
     neovim
-    nixfmt-rfc-style
+    nixfmt-tree
     git
     htop
   ];

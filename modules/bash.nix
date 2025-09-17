@@ -1,4 +1,10 @@
-{ pkgs, config, hostname, ... }: {
+{
+  pkgs,
+  config,
+  hostname,
+  ...
+}:
+{
   programs.bash = {
     enable = true;
     enableCompletion = true;

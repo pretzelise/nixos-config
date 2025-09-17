@@ -23,52 +23,66 @@
     };
   };
 
-  outputs = inputs@{ nixpkgs, nixos-wsl, home-manager, zen-browser, ... }: {
+  outputs =
+    inputs@{
+      nixpkgs,
+      nixos-wsl,
+      home-manager,
+      zen-browser,
+      ...
+    }:
+    {
 
-    nixosConfigurations = {
+      # Specify nixfmt
+      formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt-tree;
 
-      # Home PC
-      elise-pc = nixpkgs.lib.nixosSystem {
-        modules = [
-	  ./hosts/elise-pc/configuration.nix
+      nixosConfigurations = {
 
-          home-manager.nixosModules.home-manager {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
+        # Home PC
+        elise-pc = nixpkgs.lib.nixosSystem {
+          modules = [
+            ./hosts/elise-pc/configuration.nix
 
-            # Import home.nix
-            home-manager.users.elise = import ./hosts/elise-pc/home.nix;
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
 
-	    home-manager.extraSpecialArgs = {
-	      inherit inputs;
-	    };
-          }
-        ];
-      };
+              # Import home.nix
+              home-manager.users.elise = import ./hosts/elise-pc/home.nix;
 
-      # WSL environment
-      elise-wsl = nixpkgs.lib.nixosSystem {
-        modules = [
-	  ./hosts/elise-wsl/configuration.nix
+              home-manager.extraSpecialArgs = {
+                inherit inputs;
+              };
+            }
+          ];
+        };
 
-          home-manager.nixosModules.home-manager {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
+        # WSL environment
+        elise-wsl = nixpkgs.lib.nixosSystem {
+          modules = [
+            ./hosts/elise-wsl/configuration.nix
 
-            # Import home.nix
-            home-manager.users.elise = import ./hosts/elise-wsl/home.nix;
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
 
-	    home-manager.extraSpecialArgs = {
-	      inherit inputs;
-	    };
-          }
+              # Import home.nix
+              home-manager.users.elise = import ./hosts/elise-wsl/home.nix;
 
-	  nixos-wsl.nixosModules.default {
-	    wsl.enable = true;
-	    system.stateVersion = "25.05";
-	  }
-        ];
+              home-manager.extraSpecialArgs = {
+                inherit inputs;
+              };
+            }
+
+            nixos-wsl.nixosModules.default
+            {
+              wsl.enable = true;
+              system.stateVersion = "25.05";
+            }
+          ];
+        };
       };
     };
-  };
 }
